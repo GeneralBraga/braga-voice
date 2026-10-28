@@ -38,12 +38,16 @@ apenas o texto solicitado, o ID da voz selecionada e os parâmetros necessários
 ## Instalação rápida no macOS
 
 Para instalar o aplicativo pronto, abra a página de
-[Releases](https://github.com/GeneralBraga/braga-voice/releases/latest), baixe
-`BRAGA-VOICE-0.1.3-macOS-arm64.zip`, descompacte e mova **BRAGA VOICE.app**
-para **Aplicativos**.
+[Releases](https://github.com/GeneralBraga/braga-voice/releases/latest) e baixe
+o arquivo correto para o processador do Mac:
 
-Requisitos atuais: macOS 14 ou superior e Mac com Apple Silicon (M1, M2, M3,
-M4 ou posterior). Não é necessário instalar Python, Xcode ou usar o Terminal.
+- **Mac M1, M2, M3, M4 ou posterior:** `macOS-arm64.zip`;
+- **Mac Intel Core i5, i7, i9 ou Xeon:** `macOS-x86_64.zip`.
+
+Descompacte e mova **BRAGA VOICE.app** para **Aplicativos**.
+
+Requisito atual: macOS 14 ou superior em Mac Apple Silicon ou Intel. Não é
+necessário instalar Python, Xcode ou usar o Terminal.
 Como esta versão ainda não possui Developer ID/notarização Apple, na primeira
 abertura use **clique com botão direito → Abrir → Abrir**.
 
@@ -116,6 +120,7 @@ induzir alguém a acreditar que se trata de uma gravação humana real.
 
 ## Estado da distribuição
 
-A versão pública atual é um MVP para macOS Apple Silicon. O bundle usa
-assinatura local ad hoc. Distribuição sem avisos do Gatekeeper exige Developer
-ID e notarização Apple, que ainda não fazem parte deste repositório.
+A versão pública atual possui pacotes nativos separados para macOS Apple
+Silicon (`arm64`) e Intel (`x86_64`). O bundle usa assinatura local ad hoc.
+Distribuição sem avisos do Gatekeeper exige Developer ID e notarização Apple,
+que ainda não fazem parte deste repositório.

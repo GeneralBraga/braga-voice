@@ -3,7 +3,7 @@
 ## Compatibilidade
 
 - macOS 14 Sonoma ou superior;
-- Mac com Apple Silicon: M1, M2, M3, M4 ou posterior;
+- Mac com Apple Silicon ou processador Intel de 64 bits;
 - conexão com a internet para usar a ElevenLabs.
 
 O aplicativo pronto já inclui seu núcleo local. O colaborador não precisa
@@ -13,7 +13,9 @@ instalar Python, Xcode, Homebrew nem usar o Terminal.
 
 1. abra a página de
    [Releases](https://github.com/GeneralBraga/braga-voice/releases/latest);
-2. baixe `BRAGA-VOICE-0.1.3-macOS-arm64.zip`;
+2. baixe o pacote correspondente ao seu Mac:
+   - M1, M2, M3, M4 ou posterior: `BRAGA-VOICE-0.1.4-macOS-arm64.zip`;
+   - Intel Core i5, i7, i9 ou Xeon: `BRAGA-VOICE-0.1.4-macOS-x86_64.zip`;
 3. abra o ZIP;
 4. arraste **BRAGA VOICE.app** para a pasta **Aplicativos**;
 5. na primeira vez, clique no app com o botão direito e escolha
@@ -45,7 +47,7 @@ Cada release inclui um arquivo `.sha256`. Quem desejar validar o pacote pode
 executar, na pasta Downloads:
 
 ```bash
-shasum -a 256 -c BRAGA-VOICE-0.1.3-macOS-arm64.zip.sha256
+shasum -a 256 -c NOME-DO-ARQUIVO.zip.sha256
 ```
 
 O resultado esperado é `OK`.

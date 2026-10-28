@@ -8,10 +8,13 @@ if [[ "$(uname -s)" != "Darwin" ]]; then
   exit 1
 fi
 
-if [[ "$(uname -m)" != "arm64" ]]; then
-  echo "A versão atual requer Mac Apple Silicon (arm64)." >&2
-  exit 1
-fi
+case "$(uname -m)" in
+  arm64|x86_64) ;;
+  *)
+    echo "Este Mac usa uma arquitetura ainda não suportada: $(uname -m)." >&2
+    exit 1
+    ;;
+esac
 
 if ! /usr/bin/xcrun --find swiftc >/dev/null 2>&1; then
   echo "Instale o Xcode Command Line Tools com: xcode-select --install" >&2

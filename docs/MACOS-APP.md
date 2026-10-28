@@ -3,7 +3,7 @@
 ## Compatibilidade atual
 
 - macOS 14 ou superior;
-- Apple Silicon (`arm64`);
+- Apple Silicon (`arm64`) ou Intel de 64 bits (`x86_64`);
 - bundle ID: `com.bragavoice.desktop`;
 - dados privados: `~/Library/Application Support/BRAGA VOICE/`;
 - logs locais: `~/Library/Logs/BRAGA VOICE/backend.log`.
@@ -48,6 +48,10 @@ O script abaixo cria um ZIP versionado e um checksum SHA-256:
 ```bash
 ./scripts/package-release.sh
 ```
+
+O pacote é nativo da arquitetura do computador que realiza o build. A esteira
+do GitHub compila e verifica separadamente `arm64` em runner Apple Silicon e
+`x86_64` em runner Intel.
 
 Sem Developer ID e notarização, o macOS pode solicitar autorização manual na
 primeira abertura. A versão pública atual informa esse limite e orienta a

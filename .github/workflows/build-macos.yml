@@ -1,0 +1,60 @@
+name: Build macOS apps
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: macOS ${{ matrix.arch }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: arm64
+            runner: macos-15
+          - arch: x86_64
+            runner: macos-15-intel
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Ler versão do aplicativo
+        id: version
+        run: echo "value=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' packaging/Info.plist)" >> "$GITHUB_OUTPUT"
+      - name: Preparar ambiente
+        run: |
+          python -m venv .venv
+          .venv/bin/python -m pip install --upgrade pip
+          .venv/bin/python -m pip install -e ".[dev,mac]"
+      - name: Validar código e privacidade
+        run: ./scripts/check.sh
+      - name: Construir pacote nativo
+        env:
+          BRAGA_VOICE_ARCH: ${{ matrix.arch }}
+        run: ./scripts/package-release.sh
+      - name: Verificar arquitetura e assinatura
+        env:
+          BRAGA_VOICE_ARCH: ${{ matrix.arch }}
+        run: |
+          codesign --verify --deep --strict "dist/BRAGA VOICE.app"
+          file "dist/BRAGA VOICE.app/Contents/MacOS/BragaVoice" | grep "$BRAGA_VOICE_ARCH"
+          file "dist/BRAGA VOICE.app/Contents/Resources/backend/braga-voice-backend/braga-voice-backend" | grep "$BRAGA_VOICE_ARCH"
+          cd release
+          shasum -a 256 -c "BRAGA-VOICE-${{ steps.version.outputs.value }}-macOS-${BRAGA_VOICE_ARCH}.zip.sha256"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: braga-voice-macos-${{ matrix.arch }}
+          path: |
+            release/BRAGA-VOICE-${{ steps.version.outputs.value }}-macOS-${{ matrix.arch }}.zip
+            release/BRAGA-VOICE-${{ steps.version.outputs.value }}-macOS-${{ matrix.arch }}.zip.sha256
+          if-no-files-found: error
+          retention-days: 14

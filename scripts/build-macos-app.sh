@@ -3,6 +3,7 @@ set -euo pipefail
 
 ROOT_DIR="${0:A:h:h}"
 PYTHON_BIN="$ROOT_DIR/.venv/bin/python"
+TARGET_ARCH="${BRAGA_VOICE_ARCH:-$(uname -m)}"
 BUILD_DIR="$ROOT_DIR/build/macos"
 PYINSTALLER_DIR="$ROOT_DIR/build/pyinstaller"
 APP_DIR="$ROOT_DIR/dist/BRAGA VOICE.app"
@@ -11,8 +12,23 @@ MACOS_DIR="$CONTENTS_DIR/MacOS"
 RESOURCES_DIR="$CONTENTS_DIR/Resources"
 ICONSET_DIR="$BUILD_DIR/AppIcon.iconset"
 
+case "$TARGET_ARCH" in
+  arm64|x86_64) ;;
+  *)
+    echo "Arquitetura macOS não suportada: $TARGET_ARCH" >&2
+    exit 1
+    ;;
+esac
+
 if [[ ! -x "$PYTHON_BIN" ]]; then
   echo "Ambiente Python não encontrado. Execute ./scripts/start.sh primeiro." >&2
+  exit 1
+fi
+
+PYTHON_ARCH="$($PYTHON_BIN -c 'import platform; print(platform.machine())')"
+if [[ "$PYTHON_ARCH" != "$TARGET_ARCH" ]]; then
+  echo "O Python do build é $PYTHON_ARCH, mas o pacote solicitado é $TARGET_ARCH." >&2
+  echo "Compile cada arquitetura no Mac correspondente para preservar o backend nativo." >&2
   exit 1
 fi
 
@@ -31,7 +47,7 @@ mkdir -p "$BUILD_DIR" "$PYINSTALLER_DIR/dist" "$PYINSTALLER_DIR/work" \
 
 /usr/bin/swiftc \
   -parse-as-library \
-  -target arm64-apple-macos14.0 \
+  -target "${TARGET_ARCH}-apple-macos14.0" \
   -O \
   -framework AppKit \
   -framework Foundation \

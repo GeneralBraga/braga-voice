@@ -7,7 +7,7 @@
 3. para código-fonte, use um checkout explícito fornecido pelo usuário ou clone
    `https://github.com/GeneralBraga/braga-voice.git`.
 
-## Instalar no macOS Apple Silicon
+## Instalar no macOS
 
 Na raiz do checkout:
 
@@ -31,5 +31,5 @@ explicitamente solicitada.
 ## Limites atuais
 
 - macOS 14+;
-- Apple Silicon;
+- Apple Silicon (`arm64`) ou Intel de 64 bits (`x86_64`);
 - bundle ad hoc; distribuição sem alertas exige Developer ID e notarização.
