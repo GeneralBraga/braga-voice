@@ -35,11 +35,25 @@ O backend escuta somente em `127.0.0.1`. O BRAGA VOICE envia à ElevenLabs
 apenas o texto solicitado, o ID da voz selecionada e os parâmetros necessários
 à geração. Consulte [PRIVACY.md](PRIVACY.md) e [SECURITY.md](SECURITY.md).
 
-## Instalação no macOS
+## Instalação rápida no macOS
 
-Requisitos atuais: macOS 14 ou superior, Apple Silicon, Python 3.11+ e Xcode
-Command Line Tools. A versão distribuída sem Developer ID pode exigir a
-autorização manual do macOS na primeira abertura.
+Para instalar o aplicativo pronto, abra a página de
+[Releases](https://github.com/GeneralBraga/braga-voice/releases/latest), baixe
+`BRAGA-VOICE-0.1.3-macOS-arm64.zip`, descompacte e mova **BRAGA VOICE.app**
+para **Aplicativos**.
+
+Requisitos atuais: macOS 14 ou superior e Mac com Apple Silicon (M1, M2, M3,
+M4 ou posterior). Não é necessário instalar Python, Xcode ou usar o Terminal.
+Como esta versão ainda não possui Developer ID/notarização Apple, na primeira
+abertura use **clique com botão direito → Abrir → Abrir**.
+
+O passo a passo completo está em
+[Instalar no Mac](docs/INSTALAR-NO-MAC.md).
+
+## Instalação pelo código-fonte
+
+Para desenvolver ou construir o aplicativo, são necessários Python 3.11+ e
+Xcode Command Line Tools:
 
 ```bash
 git clone https://github.com/GeneralBraga/braga-voice.git
@@ -84,6 +98,7 @@ A skill usa somente a API local; ela não recebe a chave ElevenLabs.
 
 ## Documentação
 
+- [Instalar no Mac](docs/INSTALAR-NO-MAC.md)
 - [Conectar a ElevenLabs](docs/SETUP-ELEVENLABS.md)
 - [Aplicativo macOS](docs/MACOS-APP.md)
 - [Arquitetura](docs/ARQUITETURA.md)
@@ -101,6 +116,6 @@ induzir alguém a acreditar que se trata de uma gravação humana real.
 
 ## Estado da distribuição
 
-A versão atual é um MVP privado para macOS Apple Silicon. O bundle usa
-assinatura local ad hoc. Distribuição pública sem avisos do Gatekeeper exige
-Developer ID e notarização Apple, que ainda não fazem parte deste repositório.
+A versão pública atual é um MVP para macOS Apple Silicon. O bundle usa
+assinatura local ad hoc. Distribuição sem avisos do Gatekeeper exige Developer
+ID e notarização Apple, que ainda não fazem parte deste repositório.

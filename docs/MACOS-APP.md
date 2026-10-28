@@ -31,6 +31,9 @@ permissão `600`. A API nunca devolve a chave.
 O instalador cria o ambiente Python, executa os testes, constrói o bundle e
 instala `/Applications/BRAGA VOICE.app`.
 
+Para colaboradores e usuários finais, prefira o aplicativo pronto da página
+de Releases. Consulte [Instalar no Mac](INSTALAR-NO-MAC.md).
+
 Para construir e instalar manualmente:
 
 ```bash
@@ -47,8 +50,9 @@ O script abaixo cria um ZIP versionado e um checksum SHA-256:
 ```
 
 Sem Developer ID e notarização, o macOS pode solicitar autorização manual na
-primeira abertura. Uma distribuição pública deve adicionar assinatura e
-notarização Apple antes de ser anunciada como instalação sem alertas.
+primeira abertura. A versão pública atual informa esse limite e orienta a
+abertura manual. Developer ID e notarização serão necessários para uma
+instalação sem alertas.
 
 ## Checklist de validação
 

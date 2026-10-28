@@ -16,5 +16,6 @@ pessoais. Use o canal privado do proprietário do repositório.
 
 ## Limites
 
-O bundle atual usa assinatura ad hoc. A distribuição pública para usuários não
-técnicos deve usar Developer ID, notarização Apple e revisão de dependências.
+O bundle atual usa assinatura ad hoc. Por isso, o macOS pode exigir autorização
+manual na primeira abertura. Uma distribuição sem esse alerta deve usar
+Developer ID, notarização Apple e revisão de dependências.
