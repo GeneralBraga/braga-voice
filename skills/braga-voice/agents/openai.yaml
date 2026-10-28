@@ -1,0 +1,7 @@
+interface:
+  display_name: "BRAGA VOICE"
+  short_description: "Instale, configure e opere voz com IA local"
+  icon_small: "./assets/braga-voice-icon.png"
+  icon_large: "./assets/braga-voice-icon.png"
+  brand_color: "#53DEF6"
+  default_prompt: "Use $braga-voice para preparar e gerar uma voz autorizada com segurança."

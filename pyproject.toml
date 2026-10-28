@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "braga-voice"
+version = "0.1.0"
+description = "Plataforma local de roteiro e sintese de voz da BRAGA"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.115,<1",
+  "httpx>=0.27,<1",
+  "python-dotenv>=1.0,<2",
+  "uvicorn[standard]>=0.30,<1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8,<10",
+  "pytest-asyncio>=0.24,<1",
+]
+mac = [
+  "pyinstaller>=6.11,<7",
+]
+
+[project.scripts]
+braga-voice = "braga_voice.__main__:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/braga_voice"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"web" = "braga_voice/web"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+

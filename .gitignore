@@ -1,0 +1,17 @@
+.env
+.venv/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+dist/
+build/
+.DS_Store
+release/
+*.log
+
+# Vozes, audios e metadados pessoais nunca entram no Git.
+data/
+outputs/
+*.mp3
+*.wav
+*.m4a

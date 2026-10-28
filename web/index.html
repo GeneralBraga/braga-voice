@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#05080d" />
+  <title>BRAGA VOICE — Neural Voice Command</title>
+  <link rel="icon" href="/static/braga-voice-mark.png" />
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body data-system-state="booting">
+  <div class="atmosphere" aria-hidden="true"><div class="grid-plane"></div><div class="ambient-glow glow-a"></div><div class="ambient-glow glow-b"></div><div class="scanline"></div></div>
+  <div class="command-shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="BRAGA VOICE — início">
+        <span class="brand-mark" aria-hidden="true"><img src="/static/braga-voice-mark.png" alt="" /></span>
+        <span><strong>BRAGA <em>VOICE</em></strong><small>NEURAL VOICE COMMAND</small></span>
+      </a>
+      <div class="topbar-center" aria-label="Estado do sistema"><span class="live-dot"></span><span id="system-label">INICIALIZANDO NÚCLEO</span><span class="system-clock" id="clock">--:--:--</span></div>
+      <div id="status" class="provider-status"><span class="status-orbit" aria-hidden="true"></span><span><small>PROVEDOR</small><strong id="provider-label">Verificando ElevenLabs</strong></span><button id="open-settings" class="settings-button" type="button" aria-label="Configurar ElevenLabs">Configurar</button></div>
+    </header>
+
+    <div class="workspace">
+      <aside class="rail rail-left" aria-label="Fluxo de síntese">
+        <div class="rail-heading"><span>PIPELINE</span><b>01—05</b></div>
+        <ol class="pipeline" id="pipeline">
+          <li data-step="input" class="active"><span>01</span><div><strong>Roteiro</strong><small>Entrada editorial</small></div></li>
+          <li data-step="clean"><span>02</span><div><strong>Higienização</strong><small>Texto para fala</small></div></li>
+          <li data-step="direction"><span>03</span><div><strong>Direção</strong><small>Intenção vocal</small></div></li>
+          <li data-step="synthesis"><span>04</span><div><strong>ElevenLabs</strong><small>Síntese neural</small></div></li>
+          <li data-step="output"><span>05</span><div><strong>Master</strong><small>Áudio local</small></div></li>
+        </ol>
+        <div class="rail-module">
+          <div class="module-title"><span>PRIVACIDADE</span><i></i></div>
+          <p>Credencial protegida no Mac. Roteiro e áudio sob seu controle.</p>
+          <div class="secure-line"><span>VAULT LOCAL</span><b>ARMED</b></div>
+        </div>
+        <div class="shortcut-hint"><kbd>⌘</kbd><kbd>↵</kbd><span>GERAR ÁUDIO</span></div>
+      </aside>
+
+      <main class="command-main">
+        <section class="hero-console" aria-labelledby="main-title">
+          <div class="hero-copy">
+            <p class="eyebrow"><span></span> SISTEMA DE IDENTIDADE VOCAL</p>
+            <h1 id="main-title">Dê voz ao que<br />você <em>imagina.</em></h1>
+            <p class="hero-subtitle">Uma central de criação para dirigir, sintetizar e dominar a voz das suas marcas.</p>
+          </div>
+          <div class="reactor-zone" aria-label="Núcleo de voz">
+            <div class="reactor-halo"></div>
+            <div class="reactor" id="reactor">
+              <div class="reactor-ring ring-outer"><i></i><i></i><i></i></div><div class="reactor-ring ring-mid"><i></i><i></i></div><div class="reactor-ring ring-inner"></div>
+              <div class="reactor-core">
+                <svg viewBox="0 0 120 120" aria-hidden="true"><path d="M20 61h13l8-25 12 49 14-62 12 53 9-29 8 14h6" /></svg>
+                <strong id="reactor-state">STANDBY</strong><small id="reactor-detail">NÚCLEO PRONTO</small>
+              </div>
+            </div>
+            <div class="reactor-readout readout-left"><span>SIGNAL</span><b id="signal-readout">IDLE</b></div>
+            <div class="reactor-readout readout-right"><span>ENGINE</span><b id="engine-readout">—</b></div>
+          </div>
+        </section>
+
+        <section class="editor-console">
+          <div class="console-bar">
+            <div class="console-title"><span class="console-index">01</span><div><strong>Command Script</strong><small>ROTEIRO DE SÍNTESE</small></div></div>
+            <div class="script-metrics"><span><b id="count">0</b> caracteres</span><span><b id="duration">0s</b> estimados</span></div>
+          </div>
+          <div class="editor-body">
+            <div class="editor-gutter" aria-hidden="true"><span>01</span><span>02</span><span>03</span><span>04</span><span>05</span><span>06</span></div>
+            <label class="sr-only" for="text">Roteiro</label>
+            <textarea id="text" rows="10" spellcheck="true" placeholder="Escreva ou cole seu roteiro aqui. O núcleo remove Markdown, emojis e símbolos visuais antes da síntese."></textarea>
+            <div class="editor-corner" aria-hidden="true"></div>
+          </div>
+          <div class="editor-footer">
+            <div class="field"><label for="project">PROJETO</label><input id="project" value="Meu projeto" maxlength="80" /></div>
+            <div class="field voice-field"><label for="voice">IDENTIDADE VOCAL</label><select id="voice"><option value="">Aguardando conexão</option></select></div>
+            <button id="preview" class="button button-ghost" type="button"><span class="button-icon">⌁</span><span>Preparar texto<small>LIMPAR E VALIDAR</small></span></button>
+          </div>
+        </section>
+
+        <section class="direction-console" aria-labelledby="direction-title">
+          <div class="section-heading"><div><span class="section-number">02</span><div><h2 id="direction-title">Direção neural</h2><p>Defina a intenção. O sistema ajusta estabilidade, semelhança, estilo e ritmo.</p></div></div><span class="section-code">VOICE_MATRIX / ACTIVE</span></div>
+          <div id="presets" class="presets"></div>
+        </section>
+
+        <section id="prepared-panel" class="prepared-console hidden" aria-live="polite">
+          <div class="prepared-header"><div><span>ROTEIRO PROCESSADO</span><strong id="removed">0 caracteres removidos</strong></div><b>READY FOR SYNTHESIS</b></div><pre id="prepared"></pre>
+        </section>
+
+        <section class="launch-console">
+          <div class="launch-status"><span class="launch-pulse"></span><div><small>COMANDO ATUAL</small><strong id="message">Aguardando roteiro.</strong></div></div>
+          <button id="generate" class="button button-launch" type="button" disabled><span class="launch-shine"></span><span class="button-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10-6.5z" /></svg></span><span>Sintetizar minha voz<small>ELEVENLABS NEURAL ENGINE</small></span></button>
+        </section>
+
+        <section id="result-panel" class="result-console hidden">
+          <div class="result-header"><div><span>MASTER OUTPUT</span><strong>Áudio gerado com sucesso</strong></div><a id="download" href="#" download>BAIXAR MP3 ↓</a></div>
+          <canvas id="waveform" width="1100" height="150" aria-label="Visualização da forma de onda"></canvas><audio id="player" controls></audio>
+        </section>
+      </main>
+
+      <aside class="rail rail-right" aria-label="Telemetria do sistema">
+        <div class="rail-heading"><span>TELEMETRIA</span><b>LIVE</b></div>
+        <div class="telemetry-primary"><span>ESTADO DO NÚCLEO</span><strong id="telemetry-state">BOOT</strong><small id="telemetry-detail">Carregando módulos</small></div>
+        <dl class="telemetry-grid">
+          <div><dt>PROVEDOR</dt><dd>ElevenLabs</dd></div><div><dt>MODELO</dt><dd id="model-readout">—</dd></div><div><dt>FORMATO</dt><dd>MP3 · 44.1K</dd></div><div><dt>IDIOMA</dt><dd>PT-BR</dd></div><div><dt>DIREÇÃO</dt><dd id="preset-readout">Natural</dd></div><div><dt>ARMAZENAMENTO</dt><dd>LOCAL</dd></div>
+        </dl>
+        <div class="voice-vector"><div class="module-title"><span>SINAL DA VOZ</span><i></i></div><div class="signal-status"><span class="signal-dot" aria-hidden="true"></span><b id="voice-signal-label">AGUARDANDO SINAL</b></div><canvas id="mini-wave" width="280" height="90" aria-hidden="true"></canvas><div class="vector-labels"><span>IDENTIDADE</span><b id="voice-readout">NÃO VINCULADA</b></div></div>
+        <div class="session-log"><div class="module-title"><span>ATIVIDADE RECENTE</span><i></i></div><ol id="log" aria-live="polite"></ol></div>
+        <div class="system-signature"><span>BRAGA VOICE CORE</span><b>PRIVATE AI AUDIO SYSTEM</b><small id="version-label">LOCAL NODE · 127.0.0.1</small></div>
+      </aside>
+    </div>
+  </div>
+  <div id="settings-modal" class="settings-modal hidden" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+    <form id="settings-form" class="settings-card">
+      <button id="close-settings" class="settings-close" type="button" aria-label="Fechar">×</button>
+      <p class="settings-kicker">CONEXÃO INDIVIDUAL</p>
+      <h2 id="settings-title">Conecte sua ElevenLabs</h2>
+      <p class="settings-copy">Use a sua própria chave. Ela será validada diretamente na ElevenLabs e guardada somente neste Mac, fora do aplicativo e do Git.</p>
+      <label for="api-key">CHAVE DE API</label>
+      <input id="api-key" name="api_key" type="password" autocomplete="off" spellcheck="false" placeholder="sk_••••••••••••••••••••" required minlength="20" />
+      <p class="settings-privacy">A chave nunca é devolvida pela API local, exibida em logs ou incluída nos áudios.</p>
+      <p id="settings-message" class="settings-message" aria-live="polite"></p>
+      <button id="save-settings" class="settings-save" type="submit">Validar e conectar</button>
+      <a href="https://elevenlabs.io/app/settings/api-keys" target="_blank" rel="noreferrer">Abrir chaves na ElevenLabs ↗</a>
+    </form>
+  </div>
+  <script src="/static/app.js"></script>
+</body>
+</html>
