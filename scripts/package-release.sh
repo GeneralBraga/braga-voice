@@ -11,7 +11,10 @@ ARCHIVE="$RELEASE_DIR/BRAGA-VOICE-${VERSION}-macOS-arm64.zip"
 mkdir -p "$RELEASE_DIR"
 rm -f -- "$ARCHIVE" "$ARCHIVE.sha256"
 /usr/bin/ditto -c -k --keepParent "$APP_DIR" "$ARCHIVE"
-/usr/bin/shasum -a 256 "$ARCHIVE" > "$ARCHIVE.sha256"
+(
+  cd "$RELEASE_DIR"
+  /usr/bin/shasum -a 256 "${ARCHIVE:t}" > "${ARCHIVE:t}.sha256"
+)
 
 echo "Pacote criado: $ARCHIVE"
 echo "Checksum: $ARCHIVE.sha256"
