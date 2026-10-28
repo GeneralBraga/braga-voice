@@ -35,6 +35,7 @@ do aplicativo.
 ### 2. Orquestrador
 
 - normaliza texto em PT-BR;
+- transforma quebras visuais em fluxo falado sem criar silêncios longos;
 - escolhe motor conforme qualidade, privacidade, custo e velocidade;
 - registra status, duração, modelo e parâmetros;
 - nunca publica automaticamente.
@@ -68,6 +69,7 @@ do aplicativo.
 - [x] gerar e ouvir áudio real;
 - [x] aplicativo nativo instalado no macOS;
 - [x] exportar MP3 e manter histórico local;
+- [x] download nativo do MP3 para a pasta Downloads no aplicativo macOS;
 - [ ] biblioteca visual de projetos e histórico dentro da interface.
 
 ### Fase 2 — produto multimotor

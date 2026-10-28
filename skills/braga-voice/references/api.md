@@ -10,6 +10,9 @@ Base: `http://127.0.0.1:8765`.
 4. `POST /api/preview` — limpeza local, sem consumo;
 5. `POST /api/generate` — geração externa com possível consumo.
 
+O preset `natural` prioriza Eleven v4 com português e normalização automática.
+Quebras apenas visuais são unidas antes da síntese para evitar pausas longas.
+
 ## Cliente da skill
 
 ```bash

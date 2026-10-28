@@ -60,17 +60,7 @@ class ElevenLabsProvider:
     ) -> bytes:
         voice_path = quote(voice_id, safe="")
         url = f"{self.BASE_URL}/v1/text-to-speech/{voice_path}"
-        body: dict[str, Any] = {
-            "text": text,
-            "model_id": preset.model_id,
-            "voice_settings": {
-                "stability": preset.stability,
-                "similarity_boost": preset.similarity_boost,
-                "style": preset.style,
-                "speed": preset.speed,
-                "use_speaker_boost": preset.use_speaker_boost,
-            },
-        }
+        body = self._synthesis_body(text=text, preset=preset)
         headers = {**self._headers, "Content-Type": "application/json"}
         async with httpx.AsyncClient(timeout=self._timeout) as client:
             response = await client.post(
@@ -81,6 +71,27 @@ class ElevenLabsProvider:
             )
         self._raise_for_status(response)
         return response.content
+
+    @staticmethod
+    def _synthesis_body(*, text: str, preset: VoicePreset) -> dict[str, Any]:
+        voice_settings: dict[str, Any] = {
+            "stability": preset.stability,
+            "similarity_boost": preset.similarity_boost,
+        }
+        if preset.supports_speed:
+            voice_settings["speed"] = preset.speed
+        if preset.supports_style:
+            voice_settings["style"] = preset.style
+        if preset.supports_speaker_boost:
+            voice_settings["use_speaker_boost"] = preset.use_speaker_boost
+
+        return {
+            "text": text,
+            "model_id": preset.model_id,
+            "language_code": "pt",
+            "apply_text_normalization": "auto",
+            "voice_settings": voice_settings,
+        }
 
     @staticmethod
     def _raise_for_status(response: httpx.Response) -> None:

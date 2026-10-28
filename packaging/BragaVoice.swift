@@ -4,12 +4,13 @@ import WebKit
 
 @main
 @MainActor
-final class BragaVoiceApp: NSObject, NSApplicationDelegate, WKNavigationDelegate {
+final class BragaVoiceApp: NSObject, NSApplicationDelegate, WKNavigationDelegate, WKDownloadDelegate {
     private let endpoint = URL(string: "http://127.0.0.1:8765/")!
     private var backendProcess: Process?
     private var window: NSWindow!
     private var webView: WKWebView!
     private var retryCount = 0
+    private var downloadDestinations: [ObjectIdentifier: URL] = [:]
 
     static func main() {
         let application = NSApplication.shared
@@ -169,12 +170,111 @@ final class BragaVoiceApp: NSObject, NSApplicationDelegate, WKNavigationDelegate
             decisionHandler(.cancel)
             return
         }
-        if url.host == "127.0.0.1" || url.scheme == "about" {
+        if navigationAction.shouldPerformDownload && url.host == "127.0.0.1" {
+            decisionHandler(.download)
+        } else if url.host == "127.0.0.1" || url.scheme == "about" {
             decisionHandler(.allow)
         } else {
             NSWorkspace.shared.open(url)
             decisionHandler(.cancel)
         }
+    }
+
+    func webView(
+        _ webView: WKWebView,
+        decidePolicyFor navigationResponse: WKNavigationResponse,
+        decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void
+    ) {
+        let response = navigationResponse.response as? HTTPURLResponse
+        let disposition = response?.value(forHTTPHeaderField: "Content-Disposition") ?? ""
+        if disposition.lowercased().contains("attachment") {
+            decisionHandler(.download)
+        } else {
+            decisionHandler(.allow)
+        }
+    }
+
+    func webView(
+        _ webView: WKWebView,
+        navigationAction: WKNavigationAction,
+        didBecome download: WKDownload
+    ) {
+        download.delegate = self
+    }
+
+    func webView(
+        _ webView: WKWebView,
+        navigationResponse: WKNavigationResponse,
+        didBecome download: WKDownload
+    ) {
+        download.delegate = self
+    }
+
+    func download(
+        _ download: WKDownload,
+        decideDestinationUsing response: URLResponse,
+        suggestedFilename: String,
+        completionHandler: @escaping (URL?) -> Void
+    ) {
+        guard let downloadsDirectory = FileManager.default.urls(
+            for: .downloadsDirectory,
+            in: .userDomainMask
+        ).first else {
+            completionHandler(nil)
+            return
+        }
+
+        let destination = uniqueDownloadURL(
+            directory: downloadsDirectory,
+            suggestedFilename: suggestedFilename
+        )
+        downloadDestinations[ObjectIdentifier(download)] = destination
+        completionHandler(destination)
+    }
+
+    func downloadDidFinish(_ download: WKDownload) {
+        guard let destination = downloadDestinations.removeValue(
+            forKey: ObjectIdentifier(download)
+        ) else { return }
+        NSWorkspace.shared.activateFileViewerSelecting([destination])
+    }
+
+    func download(
+        _ download: WKDownload,
+        didFailWithError error: Error,
+        resumeData: Data?
+    ) {
+        downloadDestinations.removeValue(forKey: ObjectIdentifier(download))
+        showDownloadError(error.localizedDescription)
+    }
+
+    private func uniqueDownloadURL(directory: URL, suggestedFilename: String) -> URL {
+        let filename = suggestedFilename.isEmpty ? "braga-voice.mp3" : suggestedFilename
+        let original = directory.appendingPathComponent(filename)
+        guard FileManager.default.fileExists(atPath: original.path) else { return original }
+
+        let stem = original.deletingPathExtension().lastPathComponent
+        let fileExtension = original.pathExtension
+        var counter = 2
+        while true {
+            let candidateName = fileExtension.isEmpty
+                ? "\(stem)-\(counter)"
+                : "\(stem)-\(counter).\(fileExtension)"
+            let candidate = directory.appendingPathComponent(candidateName)
+            if !FileManager.default.fileExists(atPath: candidate.path) {
+                return candidate
+            }
+            counter += 1
+        }
+    }
+
+    private func showDownloadError(_ detail: String) {
+        let alert = NSAlert()
+        alert.messageText = "Não foi possível baixar o MP3"
+        alert.informativeText = detail
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
     }
 
     @objc private func reloadInterface() {

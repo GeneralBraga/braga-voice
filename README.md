@@ -12,7 +12,8 @@ a chave nunca é incluída no aplicativo, no Git ou nas respostas da API local.
 - conexão individual com ElevenLabs pela própria tela do aplicativo;
 - listagem das vozes pertencentes à conta conectada;
 - preparação de texto para fala em português brasileiro;
-- estilos Natural, Comercial, Institucional, Urgente e Teste rápido;
+- estilos Natural, Comercial e Institucional em Eleven v4, além de Urgente e
+  Teste rápido para menor latência;
 - síntese, player, download e armazenamento local;
 - skill portátil para Codex e Claude Code;
 - testes automatizados e verificação de privacidade antes de publicar.
@@ -82,6 +83,7 @@ A skill usa somente a API local; ela não recebe a chave ElevenLabs.
 - [Aplicativo macOS](docs/MACOS-APP.md)
 - [Arquitetura](docs/ARQUITETURA.md)
 - [API local](docs/API.md)
+- [Qualidade e naturalidade](docs/QUALIDADE-DE-VOZ.md)
 - [Privacidade](PRIVACY.md)
 - [Segurança](SECURITY.md)
 

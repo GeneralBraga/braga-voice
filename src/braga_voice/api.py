@@ -178,7 +178,9 @@ async def generate(request: GenerateRequest) -> dict[str, object]:
         "id": saved.id,
         "characters": len(clean_text),
         "model_id": preset.model_id,
-        "download_url": f"/api/audio/{saved.id}",
+        "filename": saved.audio_path.name,
+        "audio_url": f"/api/audio/{saved.id}",
+        "download_url": f"/api/audio/{saved.id}/download",
     }
 
 
@@ -189,5 +191,25 @@ async def audio(generation_id: str) -> FileResponse:
         audio_path = store.audio_for(generation_id)
     except FileNotFoundError as exc:
         raise HTTPException(status_code=404, detail="Audio nao encontrado.") from exc
-    return FileResponse(audio_path, media_type="audio/mpeg", filename=audio_path.name)
+    return FileResponse(
+        audio_path,
+        media_type="audio/mpeg",
+        filename=audio_path.name,
+        content_disposition_type="inline",
+    )
+
+
+@app.get("/api/audio/{generation_id}/download")
+async def download_audio(generation_id: str) -> FileResponse:
+    store = GenerationStore(get_settings().data_dir)
+    try:
+        audio_path = store.audio_for(generation_id)
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=404, detail="Audio nao encontrado.") from exc
+    return FileResponse(
+        audio_path,
+        media_type="audio/mpeg",
+        filename=audio_path.name,
+        content_disposition_type="attachment",
+    )
 
