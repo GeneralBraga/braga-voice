@@ -11,7 +11,7 @@ from braga_voice import __version__
 from braga_voice.config import get_settings, save_local_provider_config
 from braga_voice.presets import PRESETS, get_preset
 from braga_voice.providers import ElevenLabsProvider, ProviderError
-from braga_voice.sanitizer import sanitize_for_speech
+from braga_voice.sanitizer import prepare_for_speech
 from braga_voice.storage import GenerationStore
 
 
@@ -98,13 +98,18 @@ async def preview(request: PreviewRequest) -> dict[str, object]:
         preset = get_preset(request.preset)
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
-    clean_text = sanitize_for_speech(request.text)
+    preparation = prepare_for_speech(request.text)
+    clean_text = preparation.text
     if not clean_text:
         raise HTTPException(status_code=422, detail="O texto ficou vazio apos a limpeza.")
     return {
         "text": clean_text,
         "characters": len(clean_text),
         "removed_characters": len(request.text) - len(clean_text),
+        "total_adjustments": preparation.total_adjustments,
+        "adjustments": [
+            adjustment.public_dict() for adjustment in preparation.adjustments
+        ],
         "preset": preset.public_dict(),
     }
 
@@ -142,7 +147,8 @@ async def generate(request: GenerateRequest) -> dict[str, object]:
         preset = get_preset(request.preset)
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
-    clean_text = sanitize_for_speech(request.text)
+    preparation = prepare_for_speech(request.text)
+    clean_text = preparation.text
     if not clean_text:
         raise HTTPException(status_code=422, detail="O texto ficou vazio apos a limpeza.")
     if request.output_format != "mp3_44100_128":
@@ -172,6 +178,10 @@ async def generate(request: GenerateRequest) -> dict[str, object]:
             "model_id": preset.model_id,
             "characters": len(clean_text),
             "text": clean_text,
+            "speech_adjustments": [
+                adjustment.public_dict()
+                for adjustment in preparation.adjustments
+            ],
         },
     )
     return {

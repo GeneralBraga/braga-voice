@@ -17,7 +17,10 @@
 - use frases curtas e pontuação comum;
 - evite reticências, linhas vazias repetidas e palavras inteiras em caixa alta;
 - escreva siglas, números, datas e valores da forma como devem ser falados;
-- use `Preparar texto` antes de gerar e leia a versão higienizada.
+- use `Preparar narração` antes de gerar e leia a versão dirigida;
+- confira a lista de ajustes: pausas, pontuação, espaçamento, formatação,
+  abreviações e divisão de frases longas são tratadas localmente;
+- o texto processado exibido é exatamente o texto usado na síntese.
 
 ## Quando a voz ainda soar robótica
 

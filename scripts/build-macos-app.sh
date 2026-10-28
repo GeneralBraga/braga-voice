@@ -41,6 +41,7 @@ mkdir -p "$BUILD_DIR" "$PYINSTALLER_DIR/dist" "$PYINSTALLER_DIR/work" \
 
 /usr/bin/ditto "$PYINSTALLER_DIR/dist/braga-voice-backend" "$RESOURCES_DIR/backend/braga-voice-backend"
 cp "$ROOT_DIR/packaging/Info.plist" "$CONTENTS_DIR/Info.plist"
+cp "$ROOT_DIR/assets/braga-voice-icon-v3.png" "$RESOURCES_DIR/SplashMark.png"
 
 for spec in \
   "16:icon_16x16.png" \

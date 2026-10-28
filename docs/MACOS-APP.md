@@ -14,6 +14,10 @@ O executável nativo usa Swift/AppKit e apresenta a interface em WebKit. Ao
 abrir, ele inicia o backend FastAPI empacotado em `127.0.0.1:8765`. Ao encerrar
 o aplicativo, o backend também é encerrado.
 
+Enquanto o núcleo inicia, uma tela nativa usa a mesma marca oficial do app em
+fundo preto, com estado de carregamento discreto. A marca é empacotada como
+recurso local; a abertura não depende de internet nem de arquivo externo.
+
 A credencial ElevenLabs não entra no bundle. Quando o usuário conecta a conta
 pela tela, a chave é validada e gravada no suporte local do aplicativo com
 permissão `600`. A API nunca devolve a chave.

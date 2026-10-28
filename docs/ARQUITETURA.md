@@ -23,7 +23,7 @@ Arquivos e metadados locais
 
 ### 1. Interface
 
-- editor de texto com limpeza para TTS;
+- editor com Diretor de Narração e prévia exata do texto para TTS;
 - seleção de projeto, voz e estilo;
 - histórico e player;
 - download do arquivo gerado.
@@ -34,8 +34,11 @@ do aplicativo.
 
 ### 2. Orquestrador
 
-- normaliza texto em PT-BR;
+- normaliza texto em PT-BR sem reescrever seu significado;
 - transforma quebras visuais em fluxo falado sem criar silêncios longos;
+- corrige espaçamento e pontuação, fecha fragmentos, prepara abreviações e
+  divide frases excessivamente longas apenas em pausas já escritas pelo autor;
+- registra e exibe cada categoria de ajuste antes de qualquer consumo;
 - escolhe motor conforme qualidade, privacidade, custo e velocidade;
 - registra status, duração, modelo e parâmetros;
 - nunca publica automaticamente.
@@ -57,7 +60,7 @@ do aplicativo.
 ### Fase 0 — base local concluída
 
 - interface e API local;
-- limpeza de texto;
+- Diretor de Narração local com relatório de ajustes;
 - presets de direção;
 - adaptador ElevenLabs;
 - armazenamento fora do Git;

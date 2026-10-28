@@ -30,9 +30,11 @@ devem falar com a API em `127.0.0.1`; nunca devem receber a chave ElevenLabs.
 
 ## Roteiros
 
-Ajude a escrever e revisar o roteiro no chat. Antes da síntese, use a prévia
-local para remover Markdown, emojis, links e marcadores visuais. Preserve
-pontuação útil à interpretação e revise nomes, siglas, números, datas e valores.
+Ajude a escrever e revisar o roteiro no chat. Antes da síntese, use o Diretor
+de Narração local. Ele remove formatação visual, corrige espaçamento e
+pontuação, reduz pausas artificiais e divide frases excessivamente longas sem
+reescrever o sentido. Confira o texto processado e revise nomes, siglas,
+números, datas e valores.
 
 ## Integrações
 

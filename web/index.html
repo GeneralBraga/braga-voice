@@ -67,13 +67,13 @@
           <div class="editor-body">
             <div class="editor-gutter" aria-hidden="true"><span>01</span><span>02</span><span>03</span><span>04</span><span>05</span><span>06</span></div>
             <label class="sr-only" for="text">Roteiro</label>
-            <textarea id="text" rows="10" spellcheck="true" placeholder="Escreva ou cole seu roteiro aqui. O núcleo remove Markdown, emojis e símbolos visuais antes da síntese."></textarea>
+            <textarea id="text" rows="10" spellcheck="true" placeholder="Escreva ou cole como estiver. O Diretor de Narração prepara espaços, pontuação, pausas, listas e frases longas antes da síntese."></textarea>
             <div class="editor-corner" aria-hidden="true"></div>
           </div>
           <div class="editor-footer">
             <div class="field"><label for="project">PROJETO</label><input id="project" value="Meu projeto" maxlength="80" /></div>
             <div class="field voice-field"><label for="voice">IDENTIDADE VOCAL</label><select id="voice"><option value="">Aguardando conexão</option></select></div>
-            <button id="preview" class="button button-ghost" type="button"><span class="button-icon">⌁</span><span>Preparar texto<small>LIMPAR E VALIDAR</small></span></button>
+            <button id="preview" class="button button-ghost" type="button"><span class="button-icon">⌁</span><span>Preparar narração<small>DIRETOR DE TEXTO</small></span></button>
           </div>
         </section>
 
@@ -83,7 +83,7 @@
         </section>
 
         <section id="prepared-panel" class="prepared-console hidden" aria-live="polite">
-          <div class="prepared-header"><div><span>ROTEIRO PROCESSADO</span><strong id="removed">0 caracteres removidos</strong></div><b>READY FOR SYNTHESIS</b></div><pre id="prepared"></pre>
+          <div class="prepared-header"><div><span>ROTEIRO PROCESSADO</span><strong id="removed">Nenhum ajuste necessário</strong></div><b>READY FOR SYNTHESIS</b></div><pre id="prepared"></pre><ul id="adjustments" class="adjustments" aria-label="Ajustes aplicados"></ul>
         </section>
 
         <section class="launch-console">

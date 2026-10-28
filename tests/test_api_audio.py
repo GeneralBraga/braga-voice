@@ -5,6 +5,20 @@ from braga_voice.config import Settings
 from braga_voice.storage import GenerationStore
 
 
+def test_preview_reports_narration_adjustments() -> None:
+    client = TestClient(api_module.app)
+
+    response = client.post(
+        "/api/preview",
+        json={"text": "Teste local", "preset": "natural"},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["text"] == "Teste local."
+    assert response.json()["total_adjustments"] == 1
+    assert response.json()["adjustments"][0]["code"] == "punctuation"
+
+
 def test_player_is_inline_and_download_is_attachment(monkeypatch, tmp_path) -> None:
     settings = Settings(
         elevenlabs_api_key="",

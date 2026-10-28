@@ -11,7 +11,8 @@ a chave nunca é incluída no aplicativo, no Git ou nas respostas da API local.
 - aplicativo nativo para macOS com Swift, WebKit e backend FastAPI embutido;
 - conexão individual com ElevenLabs pela própria tela do aplicativo;
 - listagem das vozes pertencentes à conta conectada;
-- preparação de texto para fala em português brasileiro;
+- Diretor de Narração local: prepara espaços, pontuação, listas,
+  abreviações, pausas e frases longas para fala natural em português brasileiro;
 - estilos Natural, Comercial e Institucional em Eleven v4, além de Urgente e
   Teste rápido para menor latência;
 - síntese, player, download e armazenamento local;
@@ -48,6 +49,10 @@ cd braga-voice
 
 Depois, abra **BRAGA VOICE** pela pasta Aplicativos. Clique em **Configurar**,
 cole a sua própria chave ElevenLabs e escolha uma voz da sua conta.
+
+Você pode colar o roteiro como ele estiver. Antes de gerar, use **Preparar
+narração**: o aplicativo mostra o texto exato que será enviado para a síntese
+e lista os ajustes aplicados. Essa preparação é local e não consome créditos.
 
 Para desenvolvimento:
 

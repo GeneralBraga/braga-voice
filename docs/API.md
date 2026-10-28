@@ -9,7 +9,7 @@ Base padrão: `http://127.0.0.1:8765`.
 | `POST` | `/api/config` | Validar e salvar a própria chave local |
 | `GET` | `/api/voices` | Listar vozes da conta conectada |
 | `GET` | `/api/presets` | Listar direções vocais |
-| `POST` | `/api/preview` | Limpar e validar o texto |
+| `POST` | `/api/preview` | Preparar e dirigir o texto localmente |
 | `POST` | `/api/generate` | Gerar áudio autorizado |
 | `GET` | `/api/audio/{id}` | Reproduzir uma geração local (`inline`) |
 | `GET` | `/api/audio/{id}/download` | Baixar o MP3 (`attachment`) |
@@ -20,3 +20,8 @@ geração é uma ação com custo no provedor e exige pedido explícito do usuá
 O retorno de `/api/generate` separa `audio_url`, `download_url` e `filename`.
 O texto é enviado com idioma português e normalização automática. O preset
 Natural usa Eleven v4; o preset Teste rápido permanece no Flash v2.5.
+
+`/api/preview` retorna o texto exato da síntese em `text`, a quantidade em
+`total_adjustments` e as categorias em `adjustments`. O mesmo preparador é
+executado novamente em `/api/generate`, portanto nenhum cliente consegue pular
+acidentalmente a direção de narração.
