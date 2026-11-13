@@ -19,6 +19,8 @@ O produto continuará multimotor:
 - runtime no Mac: MLX/Metal;
 - primeira variante: 8-bit, adequada ao Mac M3 Pro com 18 GB;
 - idioma prioritário: português brasileiro;
+- saída final padrão: MP3 mono, 44,1 kHz, 128 kbps;
+- WAV será usado somente como intermediário interno de processamento;
 - licença do modelo: Apache 2.0;
 - nenhuma voz, gravação, transcrição ou peso personalizado entra no Git;
 - referências de voz são aceitas somente quando próprias ou autorizadas;
