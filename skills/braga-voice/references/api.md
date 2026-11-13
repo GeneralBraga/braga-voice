@@ -6,7 +6,7 @@ Base: `http://127.0.0.1:8765`.
 
 1. `GET /health` — núcleo disponível;
 2. `GET /api/config/status` — provedor conectado sem revelar chave;
-3. `GET /api/voices` — identidades pertencentes à conta atual;
+3. `GET /api/local-voices` ou `GET /api/voices` — identidades locais ou da conta;
 4. `POST /api/preview` — direção de narração local, sem consumo;
 5. `POST /api/generate` — geração externa com possível consumo.
 
@@ -20,10 +20,12 @@ exato que será narrado. Leia esse texto antes de autorizar a geração.
 ```bash
 python scripts/braga_voice_client.py health
 python scripts/braga_voice_client.py voices
+python scripts/braga_voice_client.py local-voices
 python scripts/braga_voice_client.py preview --text 'Meu roteiro.' --preset natural
 python scripts/braga_voice_client.py generate \
   --text 'Meu roteiro autorizado.' \
   --voice-id ID_DA_VOZ \
+  --engine qwen-local \
   --preset natural \
   --project geral \
   --output /caminho/privado/master.mp3

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
@@ -18,6 +19,7 @@ from braga_voice.providers import (
 )
 from braga_voice.sanitizer import prepare_for_speech
 from braga_voice.storage import GenerationStore
+from braga_voice.voice_profiles import VoiceProfileError, VoiceProfileStore
 
 
 PACKAGE_DIR = Path(__file__).resolve().parent
@@ -42,6 +44,15 @@ class GenerateRequest(PreviewRequest):
 
 class ProviderConfigRequest(BaseModel):
     api_key: str = Field(min_length=20, max_length=300)
+
+
+class LocalVoiceCreateRequest(BaseModel):
+    name: str = Field(min_length=2, max_length=80)
+    style: str = Field(default="natural", max_length=30)
+    transcript: str = Field(min_length=120, max_length=2_500)
+    audio_base64: str = Field(min_length=100, max_length=42_000_000)
+    mime_type: str = Field(min_length=5, max_length=100)
+    owner_authorized: bool = False
 
 
 @app.get("/", include_in_schema=False)
@@ -167,10 +178,36 @@ async def local_voices() -> list[dict[str, object]]:
             "name": item.name,
             "category": "local",
             "labels": {"language": item.language},
+            "style": item.style,
             "is_default": index == 0,
         }
         for index, item in enumerate(provider.list_voices())
     ]
+
+
+@app.post("/api/local-voices")
+async def create_local_voice(request: LocalVoiceCreateRequest) -> dict[str, object]:
+    store = VoiceProfileStore(get_settings().data_dir)
+    try:
+        profile = await asyncio.to_thread(
+            store.create,
+            name=request.name,
+            style=request.style,
+            transcript=request.transcript,
+            audio_base64=request.audio_base64,
+            mime_type=request.mime_type,
+            owner_authorized=request.owner_authorized,
+        )
+    except VoiceProfileError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    return {
+        "id": profile.id,
+        "name": profile.name,
+        "style": profile.style,
+        "duration_seconds": profile.duration_seconds,
+        "stored_locally": True,
+        "uses_credits": False,
+    }
 
 
 @app.post("/api/generate")

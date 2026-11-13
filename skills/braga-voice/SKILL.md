@@ -1,6 +1,6 @@
 ---
 name: braga-voice
-description: Instale, configure, opere ou diagnostique o BRAGA VOICE; prepare roteiros para TTS em português, liste vozes autorizadas e gere áudio pela API local conectada à conta ElevenLabs do próprio usuário. Use quando o pedido mencionar BRAGA VOICE, voz com IA, ElevenLabs local, síntese de roteiro ou integração de um projeto com a central de voz.
+description: Instale, configure, opere ou diagnostique o BRAGA VOICE; prepare roteiros para TTS em português, liste vozes autorizadas e gere áudio pela API local usando Qwen local ou a conta ElevenLabs do próprio usuário. Use quando o pedido mencionar BRAGA VOICE, voz com IA, Qwen, ElevenLabs, síntese de roteiro ou integração de um projeto com a central de voz.
 ---
 
 # BRAGA VOICE
@@ -21,6 +21,8 @@ devem falar com a API em `127.0.0.1`; nunca devem receber a chave ElevenLabs.
 - Use somente voz própria ou com autorização verificável.
 - Nunca peça ao usuário para colar chave em chat, prompt, issue ou commit.
 - A configuração da conta deve ser feita na tela local do aplicativo.
+- Perfis Qwen gravados no Estúdio de Voz ficam privados neste Mac e exigem
+  declaração de propriedade ou autorização.
 - Preparar texto não consome créditos; gerar áudio envia texto à ElevenLabs e
   pode consumir créditos. Gere somente quando o usuário pedir a geração.
 - Não publique, envie ou compartilhe áudio automaticamente.

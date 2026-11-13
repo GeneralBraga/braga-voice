@@ -39,6 +39,7 @@ def main() -> int:
     subparsers = parser.add_subparsers(dest="command", required=True)
     subparsers.add_parser("health")
     subparsers.add_parser("voices")
+    subparsers.add_parser("local-voices")
 
     preview = subparsers.add_parser("preview")
     preview.add_argument("--text", required=True)
@@ -47,6 +48,11 @@ def main() -> int:
     generate = subparsers.add_parser("generate")
     generate.add_argument("--text", required=True)
     generate.add_argument("--voice-id", required=True)
+    generate.add_argument(
+        "--engine",
+        choices=("qwen-local", "elevenlabs-cloud"),
+        default="elevenlabs-cloud",
+    )
     generate.add_argument("--preset", default="natural")
     generate.add_argument("--project", default="geral")
     generate.add_argument("--output", type=Path, required=True)
@@ -60,13 +66,15 @@ def main() -> int:
         result = request_json(args.base_url, "/health")
     elif args.command == "voices":
         result = request_json(args.base_url, "/api/voices")
+    elif args.command == "local-voices":
+        result = request_json(args.base_url, "/api/local-voices")
     elif args.command == "preview":
         result = request_json(args.base_url, "/api/preview", {"text": args.text, "preset": args.preset})
     else:
         result = request_json(
             args.base_url,
             "/api/generate",
-            {"text": args.text, "voice_id": args.voice_id, "preset": args.preset, "project": args.project},
+            {"text": args.text, "voice_id": args.voice_id, "preset": args.preset, "project": args.project, "engine": args.engine},
         )
         download_url = result["download_url"]
         args.output.parent.mkdir(parents=True, exist_ok=True)

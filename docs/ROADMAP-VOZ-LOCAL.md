@@ -158,9 +158,9 @@ consome a chave ElevenLabs.
 
 - seletor **Local / ElevenLabs / Automático**;
 - tela **Modelos locais** com download, progresso, tamanho e remoção;
-- assistente **Criar voz local**;
+- [x] assistente **Criar voz local** com gravação guiada de 30–180 segundos;
 - importação de áudio e transcrição;
-- prévia da referência antes de salvar;
+- [x] prévia da referência antes de salvar;
 - biblioteca visual de vozes locais;
 - indicador claro `100% LOCAL — SEM CRÉDITOS`;
 - mensagem honesta em Macs Intel quando o motor MLX não estiver disponível.

@@ -21,6 +21,7 @@ class LocalVoice:
     id: str
     name: str
     language: str
+    style: str
     reference_audio: Path
     transcript_path: Path
 
@@ -100,6 +101,7 @@ class QwenLocalProvider:
                 voice_id = str(profile["id"])
                 name = str(profile["name"])
                 language = str(profile.get("language") or "pt-BR")
+                style = str(profile.get("style") or "natural")
                 consent_status = str(consent.get("status") or "")
             except (FileNotFoundError, KeyError, TypeError, ValueError, json.JSONDecodeError):
                 continue
@@ -109,7 +111,7 @@ class QwenLocalProvider:
                 continue
             if not transcript.read_text(encoding="utf-8").strip():
                 continue
-            voices.append(LocalVoice(voice_id, name, language, reference, transcript))
+            voices.append(LocalVoice(voice_id, name, language, style, reference, transcript))
         return voices
 
     async def synthesize(self, *, text: str, voice_id: str) -> LocalSynthesis:

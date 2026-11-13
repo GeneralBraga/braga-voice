@@ -73,7 +73,7 @@
           <div class="editor-footer">
             <div class="field"><label for="project">PROJETO</label><input id="project" value="Meu projeto" maxlength="80" /></div>
             <div class="field"><label for="engine">MOTOR DE VOZ</label><select id="engine"><option value="">Carregando motores</option></select></div>
-            <div class="field voice-field"><label for="voice">IDENTIDADE VOCAL</label><select id="voice"><option value="">Aguardando conexão</option></select></div>
+            <div class="field voice-field"><div class="field-label-row"><label for="voice">IDENTIDADE VOCAL</label><button id="open-voice-studio" type="button">+ GRAVAR VOZ</button></div><select id="voice"><option value="">Aguardando conexão</option></select></div>
             <button id="preview" class="button button-ghost" type="button"><span class="button-icon">⌁</span><span>Preparar narração<small>DIRETOR DE TEXTO</small></span></button>
           </div>
         </section>
@@ -128,6 +128,30 @@
       <a href="https://elevenlabs.io/app/settings/api-keys" target="_blank" rel="noreferrer">Abrir chaves na ElevenLabs ↗</a>
     </form>
   </div>
-  <script src="/static/app.js?v=0.2.0-alpha.1"></script>
+  <div id="voice-studio-modal" class="settings-modal hidden" role="dialog" aria-modal="true" aria-labelledby="voice-studio-title">
+    <form id="voice-studio-form" class="settings-card voice-studio-card">
+      <button id="close-voice-studio" class="settings-close" type="button" aria-label="Fechar">×</button>
+      <p class="settings-kicker">ESTÚDIO DE IDENTIDADE LOCAL</p>
+      <h2 id="voice-studio-title">Grave seu perfil vocal</h2>
+      <p class="settings-copy">Leia o texto sugerido com a interpretação desejada. O Qwen usará esta amostra como referência de timbre, ritmo e emoção, sempre neste Mac.</p>
+      <div class="voice-form-grid">
+        <div><label for="voice-profile-name">NOME DO PERFIL</label><input id="voice-profile-name" maxlength="80" placeholder="Ex.: Jonnathan comercial" required /></div>
+        <div><label for="voice-profile-style">INTERPRETAÇÃO</label><select id="voice-profile-style"><option value="natural">Natural</option><option value="comercial">Comercial</option><option value="institucional">Institucional</option><option value="entusiasmado">Entusiasmado</option></select></div>
+      </div>
+      <label for="voice-script">LEIA EXATAMENTE ESTE TEXTO</label>
+      <textarea id="voice-script" class="voice-script" readonly></textarea>
+      <div class="recording-tips"><span>Ambiente silencioso</span><span>Microfone a um palmo</span><span>Sem música ou eco</span><span>30–90 segundos</span></div>
+      <div class="recording-console">
+        <div class="recording-meter"><i id="recording-dot"></i><div><strong id="recording-state">PRONTO PARA GRAVAR</strong><small id="recording-time">00:00 / mínimo 00:30</small></div></div>
+        <button id="record-voice" type="button">● Iniciar gravação</button>
+      </div>
+      <audio id="voice-preview" class="voice-preview hidden" controls></audio>
+      <label class="voice-consent"><input id="voice-consent" type="checkbox" /> <span>Confirmo que esta voz é minha ou que possuo autorização para utilizá-la.</span></label>
+      <p id="voice-studio-message" class="settings-message" aria-live="polite"></p>
+      <button id="save-voice-profile" class="settings-save" type="submit" disabled>Salvar perfil vocal no Mac</button>
+      <p class="settings-privacy">A gravação não é enviada à ElevenLabs, não entra no Git e permanece em Application Support.</p>
+    </form>
+  </div>
+  <script src="/static/app.js?v=0.2.0-alpha.2"></script>
 </body>
 </html>

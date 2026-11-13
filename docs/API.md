@@ -8,6 +8,8 @@ Base padrão: `http://127.0.0.1:8765`.
 | `GET` | `/api/config/status` | Estado sem expor a chave |
 | `POST` | `/api/config` | Validar e salvar a própria chave local |
 | `GET` | `/api/voices` | Listar vozes da conta conectada |
+| `GET` | `/api/local-voices` | Listar perfis vocais privados deste Mac |
+| `POST` | `/api/local-voices` | Criar perfil local autorizado a partir de gravação |
 | `GET` | `/api/presets` | Listar direções vocais |
 | `POST` | `/api/preview` | Preparar e dirigir o texto localmente |
 | `POST` | `/api/generate` | Gerar áudio autorizado |
@@ -25,3 +27,9 @@ Natural usa Eleven v4; o preset Teste rápido permanece no Flash v2.5.
 `total_adjustments` e as categorias em `adjustments`. O mesmo preparador é
 executado novamente em `/api/generate`, portanto nenhum cliente consegue pular
 acidentalmente a direção de narração.
+
+`POST /api/local-voices` recebe nome, estilo, transcrição exata, MIME type,
+áudio em base64 e confirmação de autorização. O backend valida no mínimo 30
+segundos, limita a três minutos, converte a referência para WAV mono de 24 kHz
+e grava tudo em `Application Support` com permissões privadas. A resposta não
+expõe o áudio, a transcrição nem caminhos locais.

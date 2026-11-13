@@ -4,7 +4,7 @@ import WebKit
 
 @main
 @MainActor
-final class BragaVoiceApp: NSObject, NSApplicationDelegate, WKNavigationDelegate, WKDownloadDelegate {
+final class BragaVoiceApp: NSObject, NSApplicationDelegate, WKNavigationDelegate, WKUIDelegate, WKDownloadDelegate {
     private let endpoint = URL(string: "http://127.0.0.1:8765/")!
     private var backendProcess: Process?
     private var window: NSWindow!
@@ -45,6 +45,7 @@ final class BragaVoiceApp: NSObject, NSApplicationDelegate, WKNavigationDelegate
 
         webView = WKWebView(frame: .zero, configuration: configuration)
         webView.navigationDelegate = self
+        webView.uiDelegate = self
         webView.allowsMagnification = true
         webView.setValue(false, forKey: "drawsBackground")
 
@@ -154,6 +155,20 @@ final class BragaVoiceApp: NSObject, NSApplicationDelegate, WKNavigationDelegate
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         retryCount = 0
+    }
+
+    func webView(
+        _ webView: WKWebView,
+        requestMediaCapturePermissionFor origin: WKSecurityOrigin,
+        initiatedByFrame frame: WKFrameInfo,
+        type: WKMediaCaptureType,
+        decisionHandler: @escaping (WKPermissionDecision) -> Void
+    ) {
+        if origin.host == "127.0.0.1" && type == .microphone {
+            decisionHandler(.grant)
+        } else {
+            decisionHandler(.deny)
+        }
     }
 
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {

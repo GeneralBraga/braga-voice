@@ -14,6 +14,8 @@ a chave nunca é incluída no aplicativo, no Git ou nas respostas da API local.
   silencioso;
 - síntese Qwen local em Apple Silicon, sem créditos e sem internet após a
   instalação do modelo;
+- Estúdio de Voz com gravação guiada de no mínimo 30 segundos, prévia,
+  autorização e perfis Natural, Comercial, Institucional e Entusiasmado;
 - listagem das vozes pertencentes à conta conectada;
 - Diretor de Narração local: prepara espaços, pontuação, listas,
   abreviações, pausas e frases longas para fala natural em português brasileiro;
@@ -33,6 +35,7 @@ histórico pertencem ao usuário daquele computador e não acompanham o código.
 | Chave ElevenLabs | `~/Library/Application Support/BRAGA VOICE/.env` | Não |
 | Áudios | `~/Library/Application Support/BRAGA VOICE/audio/` | Não |
 | Histórico | `~/Library/Application Support/BRAGA VOICE/history/` | Não |
+| Perfis e gravações de voz local | `~/Library/Application Support/BRAGA VOICE/voices/` | Não |
 | Logs locais | `~/Library/Logs/BRAGA VOICE/` | Não |
 
 O backend escuta somente em `127.0.0.1`. O BRAGA VOICE envia à ElevenLabs
@@ -71,6 +74,12 @@ cd braga-voice
 
 Depois, abra **BRAGA VOICE** pela pasta Aplicativos. Clique em **Configurar**,
 cole a sua própria chave ElevenLabs e escolha uma voz da sua conta.
+
+Para criar uma identidade local, escolha **+ Gravar voz**, selecione a
+interpretação, leia o roteiro sugerido por pelo menos 30 segundos, ouça a
+prévia e confirme a autorização. O perfil passa a aparecer na lista do Qwen
+local. A gravação orienta timbre, ritmo e emoção; ela não é enviada à
+ElevenLabs nem publicada pelo aplicativo.
 
 Você pode colar o roteiro como ele estiver. Antes de gerar, use **Preparar
 narração**: o aplicativo mostra o texto exato que será enviado para a síntese

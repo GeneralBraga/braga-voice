@@ -24,6 +24,7 @@ Arquivos e metadados locais
 ### 1. Interface
 
 - editor com Diretor de Narração e prévia exata do texto para TTS;
+- Estúdio de Voz com roteiro guiado, gravação, prévia e perfis de interpretação;
 - seleção de projeto, voz e estilo;
 - histórico e player;
 - download do arquivo gerado.
@@ -53,6 +54,8 @@ do aplicativo.
 ### 4. Dados
 
 - gravações, áudios e metadados fora do Git;
+- gravações de referência normalizadas em WAV mono de 24 kHz, com duração
+  validada entre 30 segundos e 3 minutos;
 - metadados com origem, consentimento, licença e finalidade;
 - exclusão controlada e trilha de auditoria;
 - caminhos locais configuráveis.
@@ -75,6 +78,7 @@ do aplicativo.
 - [x] aplicativo nativo instalado no macOS;
 - [x] exportar MP3 e manter histórico local;
 - [x] download nativo do MP3 para a pasta Downloads no aplicativo macOS;
+- [x] criação de perfil vocal local pelo microfone, sem Terminal;
 - [ ] biblioteca visual de projetos e histórico dentro da interface.
 
 ### Fase 2 — produto multimotor
