@@ -24,6 +24,22 @@ _PARAGRAPH_BREAK = re.compile(r"\n[ \t]*\n+")
 _SPACED_DASH = re.compile(r"[ \t]*[–—][ \t]*")
 _PARENTHESES = re.compile(r"[()\[\]{}]")
 _DOUBLE_QUOTE = re.compile(r"[\"“”«»]")
+_PLAIN_URL = re.compile(r"\b(?:https?://|www\.)[^\s<>()]+", re.IGNORECASE)
+_EMAIL = re.compile(r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", re.IGNORECASE)
+_BRL = re.compile(r"R\$\s*([0-9][0-9.]*(?:,[0-9]{1,2})?)")
+_PERCENT = re.compile(r"\b([0-9]+(?:[.,][0-9]+)?)\s*%")
+_DATE = re.compile(r"\b(0?[1-9]|[12][0-9]|3[01])[/.-](0?[1-9]|1[0-2])[/.-]([0-9]{2,4})\b")
+_CLOCK = re.compile(r"\b([01]?[0-9]|2[0-3]):([0-5][0-9])\b")
+_HOURS = re.compile(r"\b([0-9]+)\s*h\b", re.IGNORECASE)
+_NUMBER_SIGN = re.compile(r"\bn[.º°]\s*", re.IGNORECASE)
+_SOCIAL_MARKER = re.compile(r"(?<!\w)[#@](?=[A-Za-zÀ-ÖØ-öø-ÿ0-9_])")
+_ALL_CAPS_PHRASE = re.compile(
+    r"\b(?:[A-ZÀ-ÖØ-Þ]{2,}\s+){2,}[A-ZÀ-ÖØ-Þ]{2,}\b"
+)
+_MONTHS = (
+    "", "janeiro", "fevereiro", "março", "abril", "maio", "junho",
+    "julho", "agosto", "setembro", "outubro", "novembro", "dezembro",
+)
 _COMMON_ABBREVIATIONS = (
     (re.compile(r"\bSr\.(?=\s)", re.IGNORECASE), "senhor"),
     (re.compile(r"\bSra\.(?=\s)", re.IGNORECASE), "senhora"),
@@ -31,6 +47,10 @@ _COMMON_ABBREVIATIONS = (
     (re.compile(r"\bDra\.(?=\s)", re.IGNORECASE), "doutora"),
     (re.compile(r"\bProf\.(?=\s)", re.IGNORECASE), "professor"),
     (re.compile(r"\bProfa\.(?=\s)", re.IGNORECASE), "professora"),
+    (re.compile(r"\bAv\.(?=\s)", re.IGNORECASE), "avenida"),
+    (re.compile(r"\bR\.(?=\s)", re.IGNORECASE), "rua"),
+    (re.compile(r"\bTel\.(?=\s)", re.IGNORECASE), "telefone"),
+    (re.compile(r"\bAprox\.(?=\s)", re.IGNORECASE), "aproximadamente"),
 )
 
 
@@ -87,6 +107,9 @@ class _AdjustmentTracker:
             "pauses": "pausas artificiais reduzidas",
             "abbreviations": "abreviações preparadas para leitura",
             "long_phrases": "frases longas divididas para melhorar o ritmo",
+            "spoken_notation": "datas, horas e valores convertidos para fala",
+            "web_addresses": "endereços digitais preparados para leitura",
+            "capitalization": "ênfase artificial de caixa alta suavizada",
         }
         return tuple(
             SpeechAdjustment(code=code, label=labels[code], count=count)
@@ -117,6 +140,37 @@ def _is_short_heading(line: str) -> bool:
         and bool(letters)
         and all(char.isupper() for char in letters)
     )
+
+
+def _spoken_url(match: re.Match[str]) -> str:
+    value = re.sub(r"^(?:https?://|www\.)", "", match.group(0), flags=re.IGNORECASE)
+    value = value.rstrip(".,;:!?")
+    return (
+        value.replace("/", " barra ")
+        .replace(".", " ponto ")
+        .replace("-", " hífen ")
+        .replace("_", " sublinhado ")
+    )
+
+
+def _spoken_email(match: re.Match[str]) -> str:
+    local, domain = match.group(0).split("@", 1)
+    return local.replace(".", " ponto ") + " arroba " + domain.replace(".", " ponto ")
+
+
+def _spoken_date(match: re.Match[str]) -> str:
+    day, month, year = match.groups()
+    return f"{int(day)} de {_MONTHS[int(month)]} de {year}"
+
+
+def _spoken_clock(match: re.Match[str]) -> str:
+    hour, minute = (int(value) for value in match.groups())
+    return f"{hour} horas" if minute == 0 else f"{hour} horas e {minute} minutos"
+
+
+def _soften_all_caps(match: re.Match[str]) -> str:
+    value = match.group(0).lower()
+    return value[:1].upper() + value[1:]
 
 
 def _join_visual_lines(paragraph: str, tracker: _AdjustmentTracker) -> str:
@@ -196,6 +250,20 @@ def prepare_for_speech(text: str) -> SpeechPreparation:
         cleaned = cleaned.replace("_", " ")
         tracker.add("visual_formatting", underscore_count)
 
+    # Converte notação visual em fala antes da limpeza de símbolos.
+    cleaned = tracker.replace(_EMAIL, _spoken_email, cleaned, "web_addresses")
+    cleaned = tracker.replace(_PLAIN_URL, _spoken_url, cleaned, "web_addresses")
+    cleaned = tracker.replace(_BRL, r"\1 reais", cleaned, "spoken_notation")
+    cleaned = tracker.replace(_PERCENT, r"\1 por cento", cleaned, "spoken_notation")
+    cleaned = tracker.replace(_DATE, _spoken_date, cleaned, "spoken_notation")
+    cleaned = tracker.replace(_CLOCK, _spoken_clock, cleaned, "spoken_notation")
+    cleaned = tracker.replace(_HOURS, r"\1 horas", cleaned, "spoken_notation")
+    cleaned = tracker.replace(_NUMBER_SIGN, "número ", cleaned, "spoken_notation")
+    cleaned = tracker.replace(_SOCIAL_MARKER, "", cleaned, "symbols")
+    cleaned = tracker.replace(
+        _ALL_CAPS_PHRASE, _soften_all_caps, cleaned, "capitalization"
+    )
+
     cleaned, removed_symbols = _drop_emoji_and_symbols(cleaned)
     tracker.add("symbols", removed_symbols)
     cleaned = tracker.replace(_DOUBLE_QUOTE, "", cleaned, "symbols")
@@ -233,6 +301,9 @@ def prepare_for_speech(text: str) -> SpeechPreparation:
             _MISSING_AFTER_SENTENCE, r"\1 ", paragraph, "spacing"
         )
         paragraph = _MULTI_SPACE.sub(" ", paragraph).strip()
+        if paragraph and paragraph[0].islower():
+            paragraph = paragraph[0].upper() + paragraph[1:]
+            tracker.add("capitalization")
         if _TRAILING_SOFT_PAUSE.search(paragraph):
             paragraph = _TRAILING_SOFT_PAUSE.sub(".", paragraph)
             tracker.add("punctuation")

@@ -139,7 +139,8 @@ async def preview(request: PreviewRequest) -> dict[str, object]:
     return {
         "text": clean_text,
         "characters": len(clean_text),
-        "removed_characters": len(request.text) - len(clean_text),
+        # Conversões como "%" -> "por cento" podem aumentar o roteiro.
+        "removed_characters": max(0, len(request.text) - len(clean_text)),
         "total_adjustments": preparation.total_adjustments,
         "adjustments": [
             adjustment.public_dict() for adjustment in preparation.adjustments

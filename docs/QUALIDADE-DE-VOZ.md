@@ -22,6 +22,22 @@
   abreviações e divisão de frases longas são tratadas localmente;
 - o texto processado exibido é exatamente o texto usado na síntese.
 
+## Diretor de Narração local
+
+Antes de usar Qwen ou ElevenLabs, o BRAGA VOICE transforma notação escrita em
+fala natural, sem gastar créditos:
+
+- `R$ 1.500,00` vira `1.500,00 reais`;
+- `25%` vira `25 por cento`;
+- `13/11/2026` vira `13 de novembro de 2026`;
+- `14:30` vira `14 horas e 30 minutos`;
+- links e e-mails deixam de ser lidos como símbolos;
+- títulos inteiros em CAIXA ALTA perdem a ênfase robótica;
+- listas, Markdown, emojis, espaços e pausas artificiais são normalizados.
+
+O texto corrigido sempre aparece na tela antes da síntese. A preparação não cria
+informação nova nem muda o sentido: converte escrita visual em fala.
+
 ## Quando a voz ainda soar robótica
 
 O modelo não corrige uma amostra de clonagem ruim. Verifique, nesta ordem:

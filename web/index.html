@@ -16,7 +16,7 @@
         <span class="brand-mark" aria-hidden="true"><img src="/static/braga-voice-mark.png" alt="" /></span>
         <span><strong>BRAGA <em>VOICE</em></strong><small>NEURAL VOICE COMMAND</small></span>
       </a>
-      <div class="topbar-center" aria-label="Estado do sistema"><span class="live-dot"></span><span id="system-label">INICIALIZANDO NÚCLEO</span><span class="system-clock" id="clock">--:--:--</span></div>
+      <div class="topbar-center" aria-label="Estado do sistema"><button id="open-voice-studio-top" class="voice-studio-top" type="button"><span aria-hidden="true">◉</span><strong>ESTÚDIO DE VOZ</strong><small>GRAVAR E CRIAR PERFIL</small></button><span class="system-state"><i class="live-dot"></i><span id="system-label">INICIALIZANDO NÚCLEO</span><span class="system-clock" id="clock">--:--:--</span></span></div>
       <div id="status" class="provider-status"><span class="status-orbit" aria-hidden="true"></span><span><small>PROVEDOR</small><strong id="provider-label">Verificando ElevenLabs</strong></span><button id="open-settings" class="settings-button" type="button" aria-label="Configurar ElevenLabs">Configurar</button></div>
     </header>
 
@@ -30,6 +30,7 @@
           <li data-step="synthesis"><span>04</span><div><strong id="pipeline-engine">Motor</strong><small>Síntese neural</small></div></li>
           <li data-step="output"><span>05</span><div><strong>Master</strong><small>Áudio local</small></div></li>
         </ol>
+        <button id="open-voice-studio-rail" class="voice-studio-entry" type="button"><span class="voice-entry-icon" aria-hidden="true">◉</span><span><strong>CRIAR NOVA VOZ</strong><small>GRAVAR PERFIL LOCAL</small></span><b>→</b></button>
         <div class="rail-module">
           <div class="module-title"><span>PRIVACIDADE</span><i></i></div>
           <p>Credencial protegida no Mac. Roteiro e áudio sob seu controle.</p>
@@ -79,12 +80,12 @@
         </section>
 
         <section class="direction-console" aria-labelledby="direction-title">
-          <div class="section-heading"><div><span class="section-number">02</span><div><h2 id="direction-title">Direção neural</h2><p>Defina a intenção. O sistema ajusta estabilidade, semelhança, estilo e ritmo.</p></div></div><span class="section-code">VOICE_MATRIX / ACTIVE</span></div>
+          <div class="section-heading"><div><span class="section-number">02</span><div><h2 id="direction-title">Diretor de Narração</h2><p>Corrige escrita para fala, pontuação, pausas, datas, valores, links e ritmo antes de gerar a voz.</p></div></div><span class="section-code">LOCAL INTELLIGENCE / ACTIVE</span></div>
           <div id="presets" class="presets"></div>
         </section>
 
         <section id="prepared-panel" class="prepared-console hidden" aria-live="polite">
-          <div class="prepared-header"><div><span>ROTEIRO PROCESSADO</span><strong id="removed">Nenhum ajuste necessário</strong></div><b>READY FOR SYNTHESIS</b></div><pre id="prepared"></pre><ul id="adjustments" class="adjustments" aria-label="Ajustes aplicados"></ul>
+          <div class="prepared-header"><div><span>ROTEIRO PROCESSADO PELO DIRETOR LOCAL</span><strong id="removed">Nenhum ajuste necessário</strong></div><b>PRONTO PARA NARRAR</b></div><pre id="prepared"></pre><ul id="adjustments" class="adjustments" aria-label="Ajustes aplicados"></ul>
         </section>
 
         <section class="launch-console">
@@ -152,6 +153,6 @@
       <p class="settings-privacy">A gravação não é enviada à ElevenLabs, não entra no Git e permanece em Application Support.</p>
     </form>
   </div>
-  <script src="/static/app.js?v=0.2.0-alpha.2"></script>
+  <script src="/static/app.js?v=0.2.1"></script>
 </body>
 </html>

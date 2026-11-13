@@ -39,8 +39,8 @@ def test_directs_messy_copy_for_natural_speech() -> None:
     preparation = prepare_for_speech(source)
 
     assert preparation.text == (
-        "SEGURANÇA NÃO ESPERA. Quando o assunto é proteger o que importa, "
-        "cada segundo faz diferença! resposta rápida. tecnologia e confiança. "
+        "Segurança não espera. Quando o assunto é proteger o que importa, "
+        "cada segundo faz diferença! Resposta rápida. Tecnologia e confiança. "
         "Fale com o senhor João hoje, sem compromisso."
     )
     assert preparation.total_adjustments >= 10
@@ -68,9 +68,26 @@ def test_splits_only_very_long_phrase_at_existing_pause() -> None:
     assert any(item.code == "long_phrases" for item in preparation.adjustments)
 
 
-def test_keeps_numbers_currency_and_url_intact() -> None:
+def test_prepares_currency_and_url_for_speech() -> None:
     source = "Investimento de R$ 1.500,00. Acesse https://malupe.com.br"
-    assert sanitize_for_speech(source) == source + "."
+    assert sanitize_for_speech(source) == (
+        "Investimento de 1.500,00 reais. Acesse malupe ponto com ponto br."
+    )
+
+
+def test_prepares_date_clock_percentage_and_number_for_speech() -> None:
+    source = "Reunião em 13/11/2026, às 14:30, na sala nº 2. Meta: 25%."
+    assert sanitize_for_speech(source) == (
+        "Reunião em 13 de novembro de 2026, às 14 horas e 30 minutos, "
+        "na sala número 2. Meta: 25 por cento."
+    )
+
+
+def test_prepares_email_and_social_markers_without_losing_content() -> None:
+    source = "Escreva para contato@malupe.com.br ou siga #Malupe."
+    assert sanitize_for_speech(source) == (
+        "Escreva para contato arroba malupe ponto com ponto br ou siga Malupe."
+    )
 
 
 def test_closes_text_that_ends_with_soft_punctuation() -> None:

@@ -19,6 +19,18 @@ def test_preview_reports_narration_adjustments() -> None:
     assert response.json()["adjustments"][0]["code"] == "punctuation"
 
 
+def test_preview_never_reports_negative_removed_characters() -> None:
+    client = TestClient(api_module.app)
+    response = client.post(
+        "/api/preview",
+        json={"text": "Meta de 25%", "preset": "natural"},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["text"] == "Meta de 25 por cento."
+    assert response.json()["removed_characters"] == 0
+
+
 def test_player_is_inline_and_download_is_attachment(monkeypatch, tmp_path) -> None:
     settings = Settings(
         elevenlabs_api_key="",
