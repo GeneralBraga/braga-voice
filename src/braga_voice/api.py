@@ -10,7 +10,12 @@ from pydantic import BaseModel, Field
 from braga_voice import __version__
 from braga_voice.config import get_settings, save_local_provider_config
 from braga_voice.presets import PRESETS, get_preset
-from braga_voice.providers import ElevenLabsProvider, ProviderError, QwenLocalProvider
+from braga_voice.providers import (
+    ElevenLabsProvider,
+    LocalProviderError,
+    ProviderError,
+    QwenLocalProvider,
+)
 from braga_voice.sanitizer import prepare_for_speech
 from braga_voice.storage import GenerationStore
 
@@ -29,6 +34,7 @@ class PreviewRequest(BaseModel):
 
 
 class GenerateRequest(PreviewRequest):
+    engine: str = "elevenlabs-cloud"
     voice_id: str | None = None
     project: str = Field(default="geral", max_length=80)
     output_format: str = "mp3_44100_128"
@@ -152,14 +158,24 @@ async def voices() -> list[dict[str, object]]:
     ]
 
 
+@app.get("/api/local-voices")
+async def local_voices() -> list[dict[str, object]]:
+    provider = QwenLocalProvider(get_settings().data_dir)
+    return [
+        {
+            "id": item.id,
+            "name": item.name,
+            "category": "local",
+            "labels": {"language": item.language},
+            "is_default": index == 0,
+        }
+        for index, item in enumerate(provider.list_voices())
+    ]
+
+
 @app.post("/api/generate")
 async def generate(request: GenerateRequest) -> dict[str, object]:
     settings = get_settings()
-    if not settings.elevenlabs_ready:
-        raise HTTPException(status_code=503, detail="Configure a chave da ElevenLabs primeiro.")
-    voice_id = request.voice_id or settings.elevenlabs_voice_id
-    if not voice_id:
-        raise HTTPException(status_code=422, detail="Selecione uma voz.")
     try:
         preset = get_preset(request.preset)
     except ValueError as exc:
@@ -171,16 +187,48 @@ async def generate(request: GenerateRequest) -> dict[str, object]:
     if request.output_format != "mp3_44100_128":
         raise HTTPException(status_code=422, detail="Formato ainda nao habilitado no MVP.")
 
-    provider = ElevenLabsProvider(settings.elevenlabs_api_key)
-    try:
-        audio = await provider.synthesize(
-            text=clean_text,
-            voice_id=voice_id,
-            preset=preset,
-            output_format=request.output_format,
-        )
-    except ProviderError as exc:
-        raise HTTPException(status_code=502, detail=str(exc)) from exc
+    if request.engine == "qwen-local":
+        if not request.voice_id:
+            raise HTTPException(status_code=422, detail="Selecione uma voz local.")
+        if len(clean_text) > 2_000:
+            raise HTTPException(
+                status_code=422,
+                detail="Nesta fase, a sintese local aceita ate 2.000 caracteres por tomada.",
+            )
+        provider = QwenLocalProvider(settings.data_dir)
+        try:
+            local_result = await provider.synthesize(
+                text=clean_text,
+                voice_id=request.voice_id,
+            )
+        except LocalProviderError as exc:
+            raise HTTPException(status_code=502, detail=str(exc)) from exc
+        audio = local_result.audio
+        voice_id = request.voice_id
+        provider_id = "qwen-local"
+        model_id = local_result.model_id
+        generation_seconds = local_result.generation_seconds
+    elif request.engine == "elevenlabs-cloud":
+        if not settings.elevenlabs_ready:
+            raise HTTPException(status_code=503, detail="Configure a chave da ElevenLabs primeiro.")
+        voice_id = request.voice_id or settings.elevenlabs_voice_id
+        if not voice_id:
+            raise HTTPException(status_code=422, detail="Selecione uma voz ElevenLabs.")
+        provider = ElevenLabsProvider(settings.elevenlabs_api_key)
+        try:
+            audio = await provider.synthesize(
+                text=clean_text,
+                voice_id=voice_id,
+                preset=preset,
+                output_format=request.output_format,
+            )
+        except ProviderError as exc:
+            raise HTTPException(status_code=502, detail=str(exc)) from exc
+        provider_id = "elevenlabs-cloud"
+        model_id = preset.model_id
+        generation_seconds = None
+    else:
+        raise HTTPException(status_code=422, detail="Motor de voz desconhecido.")
 
     store = GenerationStore(settings.data_dir)
     saved = store.save(
@@ -188,11 +236,14 @@ async def generate(request: GenerateRequest) -> dict[str, object]:
         extension="mp3",
         project=request.project,
         metadata={
-            "provider": "elevenlabs",
+            "provider": provider_id,
+            "engine": request.engine,
             "voice_id": voice_id,
             "project": request.project,
             "preset": preset.id,
-            "model_id": preset.model_id,
+            "model_id": model_id,
+            "output_format": request.output_format,
+            "generation_seconds": generation_seconds,
             "characters": len(clean_text),
             "text": clean_text,
             "speech_adjustments": [
@@ -204,7 +255,11 @@ async def generate(request: GenerateRequest) -> dict[str, object]:
     return {
         "id": saved.id,
         "characters": len(clean_text),
-        "model_id": preset.model_id,
+        "engine": request.engine,
+        "provider": provider_id,
+        "model_id": model_id,
+        "uses_credits": request.engine == "elevenlabs-cloud",
+        "generation_seconds": generation_seconds,
         "filename": saved.audio_path.name,
         "audio_url": f"/api/audio/{saved.id}",
         "download_url": f"/api/audio/{saved.id}/download",

@@ -27,7 +27,7 @@
           <li data-step="input" class="active"><span>01</span><div><strong>Roteiro</strong><small>Entrada editorial</small></div></li>
           <li data-step="clean"><span>02</span><div><strong>Higienização</strong><small>Texto para fala</small></div></li>
           <li data-step="direction"><span>03</span><div><strong>Direção</strong><small>Intenção vocal</small></div></li>
-          <li data-step="synthesis"><span>04</span><div><strong>ElevenLabs</strong><small>Síntese neural</small></div></li>
+          <li data-step="synthesis"><span>04</span><div><strong id="pipeline-engine">Motor</strong><small>Síntese neural</small></div></li>
           <li data-step="output"><span>05</span><div><strong>Master</strong><small>Áudio local</small></div></li>
         </ol>
         <div class="rail-module">
@@ -72,6 +72,7 @@
           </div>
           <div class="editor-footer">
             <div class="field"><label for="project">PROJETO</label><input id="project" value="Meu projeto" maxlength="80" /></div>
+            <div class="field"><label for="engine">MOTOR DE VOZ</label><select id="engine"><option value="">Carregando motores</option></select></div>
             <div class="field voice-field"><label for="voice">IDENTIDADE VOCAL</label><select id="voice"><option value="">Aguardando conexão</option></select></div>
             <button id="preview" class="button button-ghost" type="button"><span class="button-icon">⌁</span><span>Preparar narração<small>DIRETOR DE TEXTO</small></span></button>
           </div>
@@ -88,7 +89,11 @@
 
         <section class="launch-console">
           <div class="launch-status"><span class="launch-pulse"></span><div><small>COMANDO ATUAL</small><strong id="message">Aguardando roteiro.</strong></div></div>
-          <button id="generate" class="button button-launch" type="button" disabled><span class="launch-shine"></span><span class="button-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10-6.5z" /></svg></span><span>Sintetizar minha voz<small>ELEVENLABS NEURAL ENGINE</small></span></button>
+          <div class="engine-switch" role="group" aria-label="Escolha o motor de voz">
+            <button id="engine-local" type="button" aria-pressed="false"><strong>LOCAL QWEN</strong><small>ZERO CRÉDITOS</small></button>
+            <button id="engine-cloud" type="button" aria-pressed="false"><strong>ELEVENLABS</strong><small>USA CRÉDITOS</small></button>
+          </div>
+          <button id="generate" class="button button-launch" type="button" disabled><span class="launch-shine"></span><span class="button-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10-6.5z" /></svg></span><span>Sintetizar minha voz<small id="generate-engine-label">SELECIONE O MOTOR</small></span></button>
         </section>
 
         <section id="result-panel" class="result-console hidden">
@@ -101,7 +106,7 @@
         <div class="rail-heading"><span>TELEMETRIA</span><b>LIVE</b></div>
         <div class="telemetry-primary"><span>ESTADO DO NÚCLEO</span><strong id="telemetry-state">BOOT</strong><small id="telemetry-detail">Carregando módulos</small></div>
         <dl class="telemetry-grid">
-          <div><dt>PROVEDOR</dt><dd>ElevenLabs</dd></div><div><dt>MODELO</dt><dd id="model-readout">—</dd></div><div><dt>FORMATO</dt><dd>MP3 · 44.1K</dd></div><div><dt>IDIOMA</dt><dd>PT-BR</dd></div><div><dt>DIREÇÃO</dt><dd id="preset-readout">Natural</dd></div><div><dt>ARMAZENAMENTO</dt><dd>LOCAL</dd></div>
+          <div><dt>PROVEDOR</dt><dd id="provider-readout">—</dd></div><div><dt>MODELO</dt><dd id="model-readout">—</dd></div><div><dt>FORMATO</dt><dd>44.1K · 128K</dd></div><div><dt>IDIOMA</dt><dd>PT-BR</dd></div><div><dt>DIREÇÃO</dt><dd id="preset-readout">Natural</dd></div><div><dt>ARMAZENAMENTO</dt><dd>LOCAL</dd></div>
         </dl>
         <div class="voice-vector"><div class="module-title"><span>SINAL DA VOZ</span><i></i></div><div class="signal-status"><span class="signal-dot" aria-hidden="true"></span><b id="voice-signal-label">AGUARDANDO SINAL</b></div><canvas id="mini-wave" width="280" height="90" aria-hidden="true"></canvas><div class="vector-labels"><span>IDENTIDADE</span><b id="voice-readout">NÃO VINCULADA</b></div></div>
         <div class="session-log"><div class="module-title"><span>ATIVIDADE RECENTE</span><i></i></div><ol id="log" aria-live="polite"></ol></div>
@@ -123,6 +128,6 @@
       <a href="https://elevenlabs.io/app/settings/api-keys" target="_blank" rel="noreferrer">Abrir chaves na ElevenLabs ↗</a>
     </form>
   </div>
-  <script src="/static/app.js"></script>
+  <script src="/static/app.js?v=0.2.0-alpha.1"></script>
 </body>
 </html>

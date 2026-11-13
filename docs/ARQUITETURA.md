@@ -46,7 +46,9 @@ do aplicativo.
 ### 3. Motores
 
 - `elevenlabs-cloud`: primeiro adaptador, depende de credencial local;
-- outros motores entram somente após benchmark e revisão de licença.
+- `qwen-local`: Qwen3-TTS 1.7B Base 8-bit via MLX/Metal, sem consumo de
+  créditos e com perfis privados em `Application Support`;
+- a escolha do motor é sempre explícita e não existe fallback pago silencioso.
 
 ### 4. Dados
 

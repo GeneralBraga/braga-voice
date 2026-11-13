@@ -10,6 +10,10 @@ a chave nunca é incluída no aplicativo, no Git ou nas respostas da API local.
 
 - aplicativo nativo para macOS com Swift, WebKit e backend FastAPI embutido;
 - conexão individual com ElevenLabs pela própria tela do aplicativo;
+- seletor explícito entre Qwen3-TTS local e ElevenLabs, sem fallback pago
+  silencioso;
+- síntese Qwen local em Apple Silicon, sem créditos e sem internet após a
+  instalação do modelo;
 - listagem das vozes pertencentes à conta conectada;
 - Diretor de Narração local: prepara espaços, pontuação, listas,
   abreviações, pausas e frases longas para fala natural em português brasileiro;
