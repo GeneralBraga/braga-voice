@@ -10,7 +10,7 @@ from pydantic import BaseModel, Field
 from braga_voice import __version__
 from braga_voice.config import get_settings, save_local_provider_config
 from braga_voice.presets import PRESETS, get_preset
-from braga_voice.providers import ElevenLabsProvider, ProviderError
+from braga_voice.providers import ElevenLabsProvider, ProviderError, QwenLocalProvider
 from braga_voice.sanitizer import prepare_for_speech
 from braga_voice.storage import GenerationStore
 
@@ -68,6 +68,23 @@ async def config_status() -> dict[str, object]:
         "default_voice_configured": bool(settings.elevenlabs_voice_id),
         "data_dir": str(settings.data_dir),
     }
+
+
+@app.get("/api/engines")
+async def engines() -> list[dict[str, object]]:
+    settings = get_settings()
+    local = QwenLocalProvider(settings.data_dir)
+    return [
+        local.public_status(),
+        {
+            "id": "elevenlabs-cloud",
+            "name": "ElevenLabs",
+            "provider": "cloud",
+            "ready": settings.elevenlabs_ready,
+            "uses_credits": True,
+            "requires_internet_after_install": True,
+        },
+    ]
 
 
 @app.post("/api/config")
