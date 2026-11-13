@@ -103,6 +103,7 @@ A skill usa somente a API local; ela não recebe a chave ElevenLabs.
 ## Documentação
 
 - [Instalar no Mac](docs/INSTALAR-NO-MAC.md)
+- [Roadmap de voz local](docs/ROADMAP-VOZ-LOCAL.md)
 - [Conectar a ElevenLabs](docs/SETUP-ELEVENLABS.md)
 - [Aplicativo macOS](docs/MACOS-APP.md)
 - [Arquitetura](docs/ARQUITETURA.md)
